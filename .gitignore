@@ -1,0 +1,10 @@
+# Ignore ContainerLab runtime directories
+clab-*/
+.clab.yml.bak
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore VS Code workspace settings
+.vscode/

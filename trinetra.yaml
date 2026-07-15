@@ -1,0 +1,61 @@
+name: trinetra
+
+topology:
+  nodes:
+    # 1. Branch Site (Customer Edge)
+    branch-ce1:
+      kind: linux
+      image: trinetra-router:v1
+      labels:
+        site_role: branch
+      binds:
+        - branch-ce1/daemons:/etc/frr/daemons
+        - branch-ce1/frr.conf:/etc/frr/frr.conf
+        - branch-ce1/ipsec.conf:/etc/ipsec.conf
+        - branch-ce1/ipsec.secrets:/etc/ipsec.secrets
+
+    # 2. Hub Site (Provider Edge)
+    hub-pe1:
+      kind: linux
+      image: trinetra-router:v1
+      labels:
+        site_role: PE
+      binds:
+        - hub-pe1/daemons:/etc/frr/daemons
+        - hub-pe1/frr.conf:/etc/frr/frr.conf
+        - hub-pe1/ipsec.conf:/etc/ipsec.conf
+        - hub-pe1/ipsec.secrets:/etc/ipsec.secrets
+
+    # 3. Core Router (Provider Core)
+    core-p1:
+      kind: linux
+      image: frrouting/frr:latest
+      labels:
+        site_role: P
+      binds:
+        - core-p1/daemons:/etc/frr/daemons
+        - core-p1/frr.conf:/etc/frr/frr.conf
+
+    # 4. Data Center (Hub-DC)
+    dc-1:
+      kind: linux
+      image: frrouting/frr:latest
+      labels:
+        site_role: DC
+      binds:
+        - dc-1/daemons:/etc/frr/daemons
+        - dc-1/frr.conf:/etc/frr/frr.conf
+
+    # 5. SD-WAN Controller (FastAPI Placeholder)
+    sdwan-controller:
+      kind: linux
+      image: python:3.10-slim
+      labels:
+        site_role: SDWANController
+
+  links:
+    # Defining the "cables" connecting the ports (interfaces)
+    - endpoints: ["branch-ce1:eth1", "hub-pe1:eth1"]
+    - endpoints: ["hub-pe1:eth2", "core-p1:eth1"]
+    - endpoints: ["core-p1:eth2", "dc-1:eth1"]
+    - endpoints: ["sdwan-controller:eth1", "hub-pe1:eth3"]
