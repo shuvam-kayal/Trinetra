@@ -29,7 +29,7 @@ topology:
     # 3. Core Router (Provider Core)
     core-p1:
       kind: linux
-      image: frrouting/frr:latest
+      image: trinetra-router:v1
       labels:
         site_role: P
       binds:
@@ -39,7 +39,7 @@ topology:
     # 4. Data Center (Hub-DC)
     dc-1:
       kind: linux
-      image: frrouting/frr:latest
+      image: trinetra-router:v1
       labels:
         site_role: DC
       binds:
