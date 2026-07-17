@@ -10,3 +10,15 @@
 3. Start the IPSec Tunnels:
    - `sudo docker exec clab-trinetra-branch-ce1 ipsec start`
    - `sudo docker exec clab-trinetra-hub-pe1 ipsec start`
+
+
+## Useful Troubleshooting Commands
+
+**Check Core Router Telemetry (Interface Specific):**
+`sudo docker exec clab-trinetra-core-p1 softflowctl -c /tmp/softflowd-eth1.ctl statistics`
+
+**Verify Data Center Routing Table:**
+`sudo docker exec clab-trinetra-dc-1 vtysh -c "show ip route"`
+
+**Check Controller API State:**
+`curl http://<CONTROLLER_IP>:8000/telemetry/state`

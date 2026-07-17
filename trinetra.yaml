@@ -49,9 +49,13 @@ topology:
     # 5. SD-WAN Controller (FastAPI Placeholder)
     sdwan-controller:
       kind: linux
-      image: python:3.10-slim
+      image: trinetra-controller:v1
       labels:
-        site_role: SDWANController
+        site_role: controller
+      binds:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "8000:8000"
 
   links:
     # Defining the "cables" connecting the ports (interfaces)
