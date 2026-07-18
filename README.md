@@ -5,7 +5,9 @@
 - ContainerLab installed.
 
 ## How to Start the Network
-1. Build the images by movinf into respective directories: `sudo docker build -t trinetra-controller:v1 .`
+1. Build the images by movinf into respective directories: `cd ~/trinetra-sim/sdwan-controller`
+                                                           `sudo docker build -t trinetra-controller:v1 .`
+                                                           `cd ~/trinetra-sim/te-engine`
                                                            `sudo docker build -t trinetra-te-engine:v1 .`
 2. Deploy the topology: `sudo clab deploy -t trinetra.yaml`
 3. Start the IPSec Tunnels:
