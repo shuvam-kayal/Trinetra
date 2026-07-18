@@ -57,6 +57,17 @@ topology:
       ports:
         - "8000:8000"
 
+    # 6. TE Engine (Factory 1.4 - OSPF-TE real, RSVP-TE simulated)
+    te-engine:
+      kind: linux
+      image: trinetra-te-engine:v1
+      labels:
+        site_role: te-engine
+      binds:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "8001:8000"
+
   links:
     # Defining the "cables" connecting the ports (interfaces)
     - endpoints: ["branch-ce1:eth1", "hub-pe1:eth1"]
