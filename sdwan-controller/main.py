@@ -70,6 +70,33 @@ def clear_qos():
         return {"status": "error", "message": str(e)}
 
 
+@app.post("/api/qos/push-malformed-policy")
+def push_malformed_policy():
+    """
+    Factory 1.9 controller_policy_drift scenario. Deliberately removes the
+    voice (EF) filter, so voice traffic falls through to the default bulk
+    class instead of getting priority - simulating an operator mis-push.
+    """
+    target_name, (container_name, iface) = next(iter(MANAGED_NODES.items()))
+    try:
+        node = client.containers.get(container_name)
+        node.exec_run(f"tc filter del dev {iface} protocol ip parent 1:0 prio 1")
+        STATE["policy_version"] = f"v1.{len(STATE['push_history']) + 1}-MALFORMED-qos-drift"
+        _log_push([target_name], "malformed_policy_push", True)
+        return {"status": "success",
+                "message": f"Malformed policy pushed to {target_name} - voice now misclassified as bulk",
+                "policy_version": STATE["policy_version"]}
+    except Exception as e:
+        _log_push([target_name], "malformed_policy_push", False)
+        return {"status": "error", "message": str(e)}
+
+
+@app.post("/api/qos/rollback-policy")
+def rollback_policy():
+    """Restores the correct filters by re-running the known-good QoS push."""
+    return apply_qos()
+
+
 @app.get("/telemetry/state")
 def telemetry_state():
     """

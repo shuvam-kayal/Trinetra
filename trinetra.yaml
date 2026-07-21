@@ -68,6 +68,17 @@ topology:
       ports:
         - "8001:8000"
 
+    # 7. Fault Injection Engine (Factory 1.9)
+    fault-engine:
+      kind: linux
+      image: trinetra-fault-engine:v1
+      labels:
+        site_role: fault-engine
+      binds:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "8002:8000"
+
   links:
     # Defining the "cables" connecting the ports (interfaces)
     - endpoints: ["branch-ce1:eth1", "hub-pe1:eth1"]

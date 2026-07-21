@@ -17,6 +17,11 @@ cd sdwan-controller
 sudo docker build -t trinetra-controller:v1 .
 cd ..
 
+echo "Building Fault Injection Engine Image..."
+cd fault-engine
+sudo docker build -t trinetra-fault-engine:v1 .
+cd ..
+
 echo ""
 echo "=== 2. Resetting and Deploying Data Plane (ContainerLab) ==="
 sudo clab destroy -t trinetra.yaml
